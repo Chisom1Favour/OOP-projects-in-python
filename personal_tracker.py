@@ -1,12 +1,13 @@
-import datetime
+from datetime import datetime
 import os
 import json
 
 # Budget data will be stored in this file
+BUDGET_FILE = 'budget_data.json'
 class Transaction:
     """This base class is for all financial transactions. It shows encapsulation by bundling data (amount, date, category) with the methods that work on it"""
-    def __init__(self, amount, date=None, category):
-        self.amount = (float)amount
+    def __init__(self, amount, category, date=None):
+        self.amount = float(amount)
         self.date = date if date else datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.category = category
         self.type = "base" # A default type to be overriden by subclasses
@@ -58,16 +59,16 @@ class Budget:
             with open(self.file_path, 'r') as f:
                 data = json.load(f)
                 for d in data:
-                    if d['type'] = 'income':
+                    if d['type'] == 'income':
                         self.transaction.append(Income(d['amount'], d['category'], d['date']))
-                    elif d['type'] = 'expense':
+                    elif d['type'] == 'expense':
                         self.transaction.append(Expense(d['amount'], d['category'], d['date']))
         except (IOError, JSONDecodeError) as e:
             print(f"Error loading budget file: {e}. Starting with an empty budget.")
             self.transactions = []
 
     def save_transactions(self):
-        """Saves all transactions to the JSON fuile."""
+        """Saves all transactions to the JSON file."""
         data_to_save = [t.to_dict() for t in self.transactions]
         with open(self.file_path, 'w') as f:
             json.dump(data_to_save, f, indent=4)

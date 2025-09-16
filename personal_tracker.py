@@ -82,4 +82,60 @@ class Budget:
     def get_balance(self):
         """Calculates and returns the current balance"""
         balance = 0.0
-        # This loop is another 
+        # This loop is another example of polymorphism. We check the object's type to determine whether to add or subtract its amount
+        for t in self.transactions:
+            if isinstance(t, Income):
+                balance += t.amount
+            elif isinstance(t, Expense):
+                balance -= t.amount
+        return balance
+
+    def view_all_transactions(self):
+        """Prints a list of all transactions"""
+        if not self.transactions:
+            print("\nNo transactions found")
+        else:
+            print("\n -- All Transactions ---")
+            for t in self.transactions:
+                print(t)
+            print("-------------------")
+            print(f"Current Balance: ${self.get_balance():.2f}")
+
+def main():
+    """The main function to run the command-line interface"""
+    budget = Budget(BUDGET_FILE)
+    print("Welcome to your Personal Budget Tracker")
+    while True:
+        print("\nWhat would you like to do?")
+        print("1. Add a new income")
+        print("2. Add a new expense")
+        print("3. View all transactions and balance")
+        print("4: Exit")
+        choice = input("Enter your choice (1-4): ")
+        if choice == '1':
+            try:
+                amount = float(input("Enter income amount: "))
+                category = input("Enter income category: ")
+                income = Income(amount, category)
+                budget.add_transaction(income)
+            except ValueError:
+                print("Invalid amount. Please enter a number. ")
+        elif choice == '2':
+            try:
+                amount = float(input("Enter expense amount: "))
+                category = input("Enter expense category: ")
+                expense = Expense(amount, category)
+                budget.add_transaction(expense)
+            except ValueError:
+                print("Invalid amount. Please enter a number.")
+        elif choice == '3':
+            budget.view_all_transactions()
+        elif choice == '4':
+            print("Exiting. Goodbye!")
+            break
+        else:
+            print("Invalid choice, Plese enter a number form 1 to 4")
+
+
+if __name__ == "__main__":
+    main()

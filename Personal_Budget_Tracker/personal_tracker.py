@@ -25,7 +25,7 @@ class Transaction:
         return f"Date: {self.date} | Category: {self.category} | Amount: ${self.amount:.2f}"
 
 class Income(Transaction):
-    """A class for tracking incokme transactions. This demonstrates inheritance"""
+    """A class for tracking income transactions. This demonstrates inheritance"""
     def __init__(self, amount, category, date=None):
         super().__init__(amount, category, date)
         self.type = "income"
